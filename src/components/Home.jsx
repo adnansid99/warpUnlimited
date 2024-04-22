@@ -8,9 +8,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import warpBypass from "../lib/bypass";
 
 function CircularProgressWithLabel(props) {
   const { value, errOrSucc } = props;
@@ -56,9 +56,13 @@ export default function Home() {
   const { theme } = useContext(ThemeContext);
 
   async function getApiData(referral) {
-    await warpBypass(referral)
-      .then((statusCode) => {
-        if (statusCode === 200) {
+    await axios
+      .get(
+        `https://8799a74f-1328-4047-bd41-07f5f5dd140d-00-qo9rzr022hhk.kirk.replit.dev/api/v1/${referral}`
+      )
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.statusName == "Success") {
           setStatusData((prev) => {
             return { ...prev, success: prev.success + 1, stats: "success" };
           });
